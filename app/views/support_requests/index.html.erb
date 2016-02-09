@@ -1,0 +1,34 @@
+<h1>All Support Requests</h1>
+
+<% if @support_requests != nil %>
+<table width="100%">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Department</th>
+      <th>Message</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @support_requests.each do |support_request| %>
+      <tr>
+        <td width="10%"><%= support_request.name %></td>
+        <td width="15%"><%= mail_to "#{support_request.email}" %></td>
+        <td width="10%"><%= support_request.department %></td>
+        <td width="50%"><%= support_request.message %></td>
+        <td width="15%">
+          <%= link_to "View", support_request_path(support_request) %>
+          <%= link_to "Edit", edit_support_request_path(support_request) %>
+          <%= link_to "Delete", support_request_path(support_request), method: :delete, data: {confirm: "Are you sure you want to delete this support request?"} %>
+          <%= link_to "#{support_request.completed.capitalize}", update_support_request_path(support_request, support_request: {completed: "done"}), method: :put %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<% end %>
+
+<%= paginate @support_requests %>

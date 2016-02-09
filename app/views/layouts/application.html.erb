@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SupportRequests</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<%= link_to "All Support Requests", support_requests_path %> |
+<%= link_to "New Support Request", new_support_request_path%>
+<%= form_tag("/support_requests/search", method: "get") do %>
+  <%= text_field_tag(:q, "#{session[:term]}") %>
+  <%= submit_tag("Search Support Requests") %>
+<% end %>
+<%= notice || alert %>
+<hr>
+
+<%= yield %>
+
+</body>
+</html>

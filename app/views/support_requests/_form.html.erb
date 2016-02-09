@@ -1,0 +1,31 @@
+<% if @support_request.errors %>
+  <ul>
+    <% @support_request.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_for @support_request do |f| %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+  <div>
+    <%= f.radio_button :department, "sales", :checked => (@support_request.department == "sales") %>
+    <%= label_tag(:department_sales, "Sales") %>
+    <%= f.radio_button :department, "marketing", :checked => (@support_request.department == "marketing") %>
+    <%= label_tag(:department_marketing, "Marketing") %>
+    <%= f.radio_button :department, "technical", :checked => (@support_request.department == "technical") %>
+    <%= label_tag(:department_technical, "Technical") %>
+  </div>
+  <div>
+    <%= f.label :message %>
+    <%= f.text_area :message %>
+  </div>
+  <%= f.submit %>
+<% end %>
