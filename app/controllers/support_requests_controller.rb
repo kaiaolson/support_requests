@@ -17,24 +17,20 @@ class SupportRequestsController < ApplicationController
   end
 
   def index
-    @support_requests = SupportRequest.order("completed DESC", "updated_at DESC").page params[:page]
+    @support_requests = SupportRequest.order("status DESC", "updated_at DESC").page params[:page]
   end
 
   def show
+    flip_status if params[:flip]
+    redirect_to support_requests_path
   end
 
   def edit
   end
 
   def update
-    completed_status_before = @support_request.completed
     if @support_request.update support_request_params
-      completed_status_after = @support_request.completed
-      if completed_status_after != completed_status_before
-        redirect_to support_requests_path
-      else
-        redirect_to support_request_path(@support_request)
-      end
+      redirect_to support_request_path(@support_request)
       flash[:notice] = "Support Request updated successfully!"
     else
       flash[:alert] = "Support Request not updated. See errors."
@@ -60,6 +56,17 @@ class SupportRequestsController < ApplicationController
   end
 
   def support_request_params
-    params.require(:support_request).permit(:name, :email, :department, :message, :completed)
+    params.require(:support_request).permit(:name, :email, :department, :message, :status)
+  end
+
+  def flip_status
+    find_support_request
+    if @support_request.status == "Not Done"
+      @support_request.status = "Done"
+      @support_request.save
+    else
+      @support_request.status = "Not Done"
+      @support_request.save
+    end
   end
 end
